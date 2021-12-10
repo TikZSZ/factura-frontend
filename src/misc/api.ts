@@ -1,8 +1,7 @@
 import axios from "axios";
-console.log(process.env);
 export default axios.create({
-  baseURL:process.env.VUE_APP_BASE_URL || 'http://localhost:5000',
+  baseURL:'https://factura-0.herokuapp.com/' ,
   withCredentials:true,
 })
-
+//'http://localhost:5000'
 
