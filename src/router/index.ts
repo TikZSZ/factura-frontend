@@ -6,11 +6,6 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes: [
     {
-      path: '/home',
-      name: 'Home',
-      component: HomeView,
-    },
-    {
       path: '/signup',
       name: 'SignUp',
       component: () => import("@/views/SignUp.vue"),
@@ -49,7 +44,9 @@ const router = createRouter({
     },
     {
       path:"/",
-      redirect:'/home'
+      name: 'Home',
+      component: HomeView,
+      alias:"/home"
     },
     {
       path:"/about",
@@ -61,7 +58,7 @@ const router = createRouter({
 router.beforeEach((to,from,next)=>{
   window.scroll({top:0})
   const store = useStore()
-  store.currentPath = to.path === "/" ? "/home" : to.path
+  store.currentPath = to.path 
   next()
 })
 export default router

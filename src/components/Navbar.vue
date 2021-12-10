@@ -40,7 +40,7 @@
 							<div
 								class="flex flex-col items-start justify-center w-full space-x-6 text-center lg:space-x-8 lg:w-2/3 lg:mt-0 lg:flex-row lg:items-center -mt-5"
 							>
-								<NavLinkVue name="Home" to="/home" :currentPath="currentPath" :onChangePath="onChangePath" />
+								<NavLinkVue name="Home" to="/" :currentPath="currentPath" :onChangePath="onChangePath" />
 								<NavLinkVue
 									name="Dashboard"
 									to="/dashboard"
