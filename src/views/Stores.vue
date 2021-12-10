@@ -34,7 +34,7 @@ const d = (async () => {
 Prisma
 <template>
 	<div class="mx-auto w-full">
-		<div v-if="!stores" class="bg-white min-h-screen dark:bg-gray-800">
+		<div v-if="stores?.length === 0" class="bg-white min-h-screen dark:bg-gray-800">
 			<div
 				class="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20"
 			>
@@ -53,7 +53,7 @@ Prisma
 			</div>
 		</div>
 
-		<div v-else="stores" class="container lg:mt-9 px-4 mx-auto sm:px-8">
+		<div v-else class="container lg:mt-9 px-4 mx-auto sm:px-8">
 			<div class="py-8">
 				<div class="flex flex-row mb-1 sm:mb-0 justify-between w-full">
 					<h2 class="text-2xl leading-tight">Stores</h2>
