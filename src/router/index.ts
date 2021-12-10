@@ -3,8 +3,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/home',
+      name: 'Home',
+      component: HomeView,
+    },
     {
       path: '/signup',
       name: 'SignUp',
@@ -44,9 +49,7 @@ const router = createRouter({
     },
     {
       path:"/",
-      name: 'Home',
-      component: HomeView,
-      alias:"/home"
+      redirect:'/home'
     },
     {
       path:"/about",
@@ -58,7 +61,7 @@ const router = createRouter({
 router.beforeEach((to,from,next)=>{
   window.scroll({top:0})
   const store = useStore()
-  store.currentPath = to.path 
+  store.currentPath = to.path === "/" ? "/home" : to.path
   next()
 })
 export default router
