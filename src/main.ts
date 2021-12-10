@@ -9,6 +9,6 @@ const app = createApp(App)
 app.use(router)
 app.use(createPinia())
 app.mount('#app')
-console.log(process.env);
+console.log(import.meta.env);
 
 

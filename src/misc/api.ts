@@ -1,7 +1,6 @@
 import axios from "axios";
 export default axios.create({
-  baseURL:'https://factura-0.herokuapp.com/' ,
+  baseURL:import.meta.env['VITE_APP_BASEURL'] as string || 'http://localhost:5000' ,
   withCredentials:true,
 })
-//'http://localhost:5000'
 
