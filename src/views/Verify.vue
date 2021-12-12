@@ -120,7 +120,8 @@ const submit = async () => {
         <div v-else>
           Products:
           <div class="ml-20" v-for="(product,i) of value as Product[]">
-            <div v-for="(v,k) of product">
+            {{i}}:
+            <div v-for="(v,k,index) of product" class="ml-2">
               <span class="text-gray-500">{{k}}</span>: {{v}}
             </div>
           </div>

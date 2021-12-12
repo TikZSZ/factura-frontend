@@ -223,8 +223,9 @@ const copy = () => {
             </p>
           </div>
         </div>
-        <p>{{clipboard.text}}</p>
-        <button @click="copy" class="bg-blue-500 p-3 rounded-2xl w-full text-white">Copy Verification Info</button>
+        <button @click="clipboard.copy(receipt!.sequence_no.toString())" class="bg-blue-500 p-3 rounded-2xl text-white">Copy Sequence Number</button>
+        <button @click="clipboard.copy(receipt!.signature)" class="bg-blue-500 p-3 rounded-2xl text-white">Copy Signature</button>
+        <button @click="clipboard.copy(receipt!.store.seller.public_key)" class="bg-blue-500 p-3 rounded-2xl text-white">Copy Seller Public Key</button>
       </div>
     </div>
   </div>
