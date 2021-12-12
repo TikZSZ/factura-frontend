@@ -24,7 +24,7 @@ interface RootObject {
   products: Product[];
 }
 
-const receipts = ref<RootObject[]>();
+const receipts = ref<RootObject[]|null>();
 const route = useRoute()
 const fetch = (async () => {
   //`/api/getReceiptsForStore/${route.params.storeId}`
@@ -42,7 +42,7 @@ const getTime = (time:string) => {
 
 <template>
   <div class=" px-2 md:px-8 mx-auto w-full  min-h-screen">
-    <div v-if="receipts?.length === 0"  class="py-3">
+    <div v-if="!receipts"  class="py-3">
       <h1 class="text-xl text-red-600">Oops! no receipts to show yet. Buy something from a factura assoicated store to view ur receipts here.</h1>
     </div>
     <div v-else class="py-3">
