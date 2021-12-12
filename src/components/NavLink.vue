@@ -1,16 +1,17 @@
 <template>
-  <router-link class="text-md text-gray-600 inline-block w-full py-2 mx-0 ml-6 font-semibold text-left md:ml-0 md:w-auto md:px-0 md:mx-2 lg:mx-3 md:text-center"
+  <router-link class="text-md text-gray-600 inline-block w-full py-2 mx-0 ml-6 font-semibold text-left lg:ml-0 lg:w-auto lg:px-0 lg:mx-2  lg:text-center"
   :to="to"
-  :class="{'text-indigo-700':(currentPath===to),'hover:text-indigo-700':!(currentPath===to)}"
-  @click="onChangePath(to)"
+  :class="{'text-indigo-700':(`/${currentPath.substring(1).split('/')[0]}`===props.to),'hover:text-indigo-700':!(`/${currentPath.substring(1).split('/')[0]}`===props.to)}"
+  @click="currentPath = to"
   >
     {{name}}
   </router-link>
   <!-- text-sm font-semibold text-indigo-700 -->
 </template>
 
-<script lang="ts" setup>import { PropType } from 'vue-demi';
-
+<script lang="ts" setup>
+import { useStore } from '@/store';
+import { toRefs } from 'vue';
 
 const props = defineProps({
   name:String,
@@ -19,12 +20,6 @@ const props = defineProps({
     default:'/home',
     type:String || Object 
   },
-  currentPath:String,
-  onChangePath:{
-    type:Function as PropType<(path:string)=>void>,
-    required:true
-  }
 })
-
-
+const {currentPath} = toRefs(useStore())
 </script>

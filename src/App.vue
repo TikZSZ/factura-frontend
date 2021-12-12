@@ -18,9 +18,9 @@ useResizeObserver(el, (entries) => {
   store.isMobile = width < 768
 })
 
-const d = (async ()=>{
-  store.checkAuth()
-})()
+// const d = (async ()=>{
+//   store.checkAuth()
+// })()
 
 
 </script>
@@ -28,7 +28,9 @@ const d = (async ()=>{
 <template>
     <div ref="el">
       <NavbarVue />
-      <router-view />
+      <div >
+        <router-view />
+      </div>
     </div>
 </template>
 

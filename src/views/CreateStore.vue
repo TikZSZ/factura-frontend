@@ -2,60 +2,66 @@
 import { reactive, ref } from "vue";
 import api from "@/misc/api";
 import { useRouter } from "vue-router";
-import {sendToConsensus} from "./useConsensus";
+import { sendToConsensus } from "./useConsensus";
 import { useStore } from "@/store";
 import Prompt from "@/components/Prompt.vue";
 import signature from "@/misc/signature";
 
 const prompt = ref(false);
 const router = useRouter();
-const {navDash} = useStore()
-
+const { navDash } = useStore()
+const disabled = ref(false);
 const submitData = reactive({
 	store_name: "",
 	country: "",
 	address: "",
 	website: "",
-	phone_number:521
+	phone_number: 521
 });
 
 const submit = async () => {
 	prompt.value = true;
 };
 
-const sign = async (privateKey:string) => {
-	const prepData = {...submitData,timeRegistred:new Date().toUTCString()} 
-	const {hexSignature} = signature(privateKey,JSON.stringify(prepData))
-	const record = await sendToConsensus<string>(JSON.stringify({seller:prepData,signature:hexSignature}),privateKey)
-
-	if(!record) return
-
-	console.log(record.consensusTimestamp,record.receipt.topicSequenceNumber);
-	const { data } = await api.post<any>("/api/createStore", {
-		data: {
-			...prepData,
-			signature: hexSignature,
-			timestamp:record.consensusTimestamp.toString(),
-			sequence_no:record.receipt.topicSequenceNumber?.toInt()
-		},
-	});
-	console.log(data);
-	
-	prompt.value = false;
-	navDash("Stores",router)
+const sign = async (privateKey: string) => {
+	disabled.value = true
+	const prepData = { ...submitData, timeRegistred: new Date().toUTCString() }
+	const { hexSignature } = signature(privateKey, prepData)
+	try{
+		const record = await sendToConsensus<string>(JSON.stringify({ seller: prepData, signature: hexSignature }), privateKey)
+		if (!record) return
+		console.log(record.consensusTimestamp, record.receipt.topicSequenceNumber);
+		const { data } = await api.post<any>("/api/createStore", {
+			data: {
+				...prepData,
+				signature: hexSignature,
+				timestamp: record.consensusTimestamp.toString(),
+				sequence_no: record.receipt.topicSequenceNumber?.toInt()
+			},
+		});
+		console.log(data);
+		prompt.value = false;
+		navDash("Stores", router);
+	} catch(err){
+		disabled.value = false
+	}
 };
 </script>
 
 <template>
-	<div class="w-full  h-screen bg-white">
+	<div class="w-full h-screen bg-white">
 		<div class="mx-auto max-w-7xl">
 			<!-- Prompt -->
-			<Prompt v-if="prompt" :sign="sign"/>
+			<Prompt v-if="prompt" :sign="sign" :disabled="false" />
 
 			<div class="flex flex-col lg:flex-row" v-show="!prompt">
 				<!-- Left Div -->
-				<div class=" w-full bg-cover lg:w-6/12 xl:w-6/12 bg-gradient-to-r from-white via-white to-gray-100">
-					<div class="relative flex flex-col items-center justify-center w-full h-full px-10 my-20 lg:px-16 lg:my-0">
+				<div
+					class="w-full bg-cover lg:w-6/12 xl:w-6/12 bg-gradient-to-r from-white via-white to-gray-100"
+				>
+					<div
+						class="relative flex flex-col items-center justify-center w-full h-full px-10 my-20 lg:px-16 lg:my-0"
+					>
 						<div class="flex flex-col items-start space-y-8 tracking-tight lg:max-w-3xl">
 							<div class="relative">
 								<p class="mb-2 font-medium text-gray-700 uppercase">Work smarter</p>
@@ -67,114 +73,61 @@ const sign = async (privateKey:string) => {
 							</p>
 							<a
 								href="#_"
-								class="
-									inline-block
-									px-8
-									py-5
-									text-xl
-									font-medium
-									text-center text-white
-									transition
-									duration-200
-									bg-blue-600
-									rounded-lg
-									hover:bg-blue-700
-									ease
-								"
-							>
-								Get Started Today
-							</a>
+								class="inline-block px-8 py-5 text-xl font-medium text-center text-white transition duration-200 bg-blue-600 rounded-lg hover:bg-blue-700 ease"
+							>Get Started Today</a>
 						</div>
 					</div>
 				</div>
 				<!-- Right Div -->
-				<div class="w-full bg-white lg:w-6/12 xl:w-6/12 ">
-					<div class="flex flex-col items-start justify-start w-full  p-10 lg:p-16 xl:p-24">
+				<div class="w-full bg-white lg:w-6/12 xl:w-6/12">
+					<div class="flex flex-col items-start justify-start w-full p-10 lg:p-16 xl:p-24">
 						<h4 class="w-full text-3xl font-bold">Create Store</h4>
 						<form @submit.prevent="submit" class="relative w-full mt-10 space-y-8">
 							<div class="relative">
-								<label class="font-medium text-gray-900">Name<span class="text-red-500 required-dot"> * </span></label>
+								<label class="font-medium text-gray-900">
+									Name
+									<span class="text-red-500 required-dot">*</span>
+								</label>
 								<input
 									type="text"
-									class="
-										block
-										w-full
-										px-4
-										py-4
-										mt-2
-										text-xl
-										placeholder-gray-400
-										bg-gray-200
-										rounded-lg
-										focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50
-									"
+									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
 									v-model="submitData.store_name"
 									placeholder="Enter Your Store Name"
 								/>
 							</div>
 							<div class="relative">
-								<label class="font-medium text-gray-900"
-									>Address<span class="text-red-500 required-dot"> * </span></label
-								>
+								<label class="font-medium text-gray-900">
+									Address
+									<span class="text-red-500 required-dot">*</span>
+								</label>
 								<input
 									type="text"
-									class="
-										block
-										w-full
-										px-4
-										py-4
-										mt-2
-										text-xl
-										placeholder-gray-400
-										bg-gray-200
-										rounded-lg
-										focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50
-									"
+									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
 									v-model="submitData.address"
 									placeholder="Enter Your Store Address "
 								/>
 							</div>
-              <!-- Website -->
+							<!-- Website -->
 							<div class="relative">
-								<label class="font-medium text-gray-900"
-									>Website <span class="text-red-500 required-dot"> * </span></label
-								>
+								<label class="font-medium text-gray-900">
+									Website
+									<span class="text-red-500 required-dot">*</span>
+								</label>
 								<input
-									type="password"
-									class="
-										block
-										w-full
-										px-4
-										py-4
-										mt-2
-										text-xl
-										placeholder-gray-400
-										bg-gray-200
-										rounded-lg
-										focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50
-									"
+									type="text"
+									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
 									v-model="submitData.website"
 									placeholder="Store Website"
 								/>
 							</div>
 							<div class="relative">
-								<label class="font-medium text-gray-900"
-									>Country<span class="text-red-500 required-dot"> * </span></label
-								>
+								<label class="font-medium text-gray-900">
+									Country
+									<span class="text-red-500 required-dot">*</span>
+								</label>
 								<select
 									id="country"
-									class="
-										block
-										w-full
-										px-4
-										py-4
-										mt-2
-										text-xl
-										placeholder-gray-400
-										bg-gray-200
-										rounded-lg
-										focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50
-									"
+									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
 									v-model="submitData.country"
 									name="country"
 									placeholder="Country"
@@ -431,24 +384,8 @@ const sign = async (privateKey:string) => {
 							<div class="relative">
 								<button
 									href="#_"
-									class="
-										inline-block
-										w-full
-										px-5
-										py-4
-										text-lg
-										font-medium
-										text-center text-white
-										transition
-										duration-200
-										bg-blue-600
-										rounded-lg
-										hover:bg-blue-700
-										ease
-									"
-								>
-									Create Account
-								</button>
+									class="inline-block w-full px-5 py-4 text-lg font-medium text-center text-white transition duration-200 bg-blue-600 rounded-lg hover:bg-blue-700 ease"
+								>Create Account</button>
 							</div>
 						</form>
 					</div>

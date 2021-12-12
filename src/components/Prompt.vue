@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-defineProps<{ sign: (privateKey: string) => void }>()
+defineProps<{ sign: (privateKey: string) => void,disabled?:boolean }>()
 const privateKey = ref('')
 </script>
 
 <template>
-  <div class="absolute w-full h-screen z-20 inset-0 overflow-y-auto">
-    <div class="absolute w-full h-screen inset-0 bg-gray-500 opacity-80"></div>
+  <div class="absolute w-full  z-20 inset-0 overflow-y-auto">
+    <div class="absolute w-full  inset-0 bg-gray-500 opacity-80"></div>
     <div
       class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
     >
@@ -35,6 +35,7 @@ const privateKey = ref('')
                     <!-- Submit Button -->
                     <div class="relative">
                       <button
+                        :disabled="disabled || false"
                         class="inline-block w-full px-5 py-4 text-lg font-medium text-center text-white transition duration-200 bg-blue-600 rounded-lg hover:bg-blue-700 ease"
                       >Sign</button>
                     </div>

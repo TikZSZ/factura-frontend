@@ -1,5 +1,5 @@
 import Products from '@/misc/Products'
-import { reactive ,ref} from 'vue'
+import { reactive ,ref,toRefs} from 'vue'
 
 export default function useFields(){
 
@@ -41,6 +41,17 @@ export default function useFields(){
   function update(i:number,field:keyof Products,value:any){
     submitData.products[i][field] = value
   }
+  function addProduct(){
+    submitData.products.push({
+      seq:submitData.products.length,
+      qty:1,
+      tax:0,
+      discount:0
+    })
+  }
 
-  return {fields,submitData,update}
+  function removeProducts(index:number){
+    submitData.products.splice(index,1)
+  }
+  return {fields,submitData,update,addProduct,removeProducts}
 }

@@ -5,11 +5,17 @@
 
             <!-- Left Div -->
             <div class="w-full space-y-5 md:w-3/5 md:pr-16">
-                <p class="font-medium text-blue-500 uppercase">Building Businesses</p>
+                <p class="font-medium text-blue-500 uppercase">Smart Login</p>
                 <h2 class="text-2xl font-extrabold leading-none text-black sm:text-3xl md:text-5xl">
-                    Changing The Way People Do Business.
+                    Changing The Way People login
                 </h2>
-                <p class="text-xl text-gray-600 md:pr-16">Learn how to engage with your visitors and teach them about your mission. We're revolutionizing the way customers and businesses interact.</p>
+                <p class="text-xl text-gray-600 md:pr-16">No more emails and passwords just web3 credentials.</p>
+								<p class="text-xl text-red-400">
+									Note 1: As of today there is no wallet extension (for hedera) on browsers that allows signing transactions so for now you will have to manually enter the credentials 
+								</p>
+								<p class="text-xl text-red-400">
+									Note 2: Your private key never leaves the browser all transactions are signed in browser by you. 
+								</p>
             </div>
             <!-- Right Div  -->
             <div class="w-full mt-16 md:mt-0 md:w-2/5">

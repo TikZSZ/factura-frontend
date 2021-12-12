@@ -6,18 +6,17 @@ import Sidebar from "@/components/Dashboard/Sidebar/Sidebar.vue";
 
 const {isMobile,currentTab} = toRefs(useStore())
 const isOpen = ref(false)
+
 const toggle = (val:boolean)=>{
   isOpen.value = val
 }
+console.log("yo");
+
 const router = useRouter()
 const name = useRoute().name as string
-currentTab.value = name==="Dashboard"?"Stores":name
-router.push({name:currentTab.value})
 
-const onTabChange = (newTabname:string)=>{
-  currentTab.value = newTabname;
-  router.push({name:currentTab.value})
-}
+currentTab.value = name === "Dashboard" ? "Stores" : name
+router.push({name:currentTab.value})
 
 </script>
 
@@ -27,9 +26,9 @@ const onTabChange = (newTabname:string)=>{
     <div class="flex items-start justify-between">
       <!-- SideBar -->
       <Sidebar 
-      :is-mobile="isMobile" 
-      :is-open="isOpen" 
-      :toggle="toggle"
+        :is-mobile="isMobile" 
+        :is-open="isOpen" 
+        :toggle="toggle"
       />
       <!-- Main -->
       <div class="flex flex-col w-full ">

@@ -40,19 +40,11 @@
 							<div
 								class="flex flex-col items-start justify-center w-full space-x-6 text-center lg:space-x-8 lg:w-2/3 lg:mt-0 lg:flex-row lg:items-center -mt-5"
 							>
-								<NavLinkVue name="Home" to="/" :currentPath="currentPath" :onChangePath="onChangePath" />
-								<NavLinkVue
-									name="Dashboard"
-									to="/dashboard"
-									:currentPath="currentPath"
-									:onChangePath="onChangePath"
-								/>
-								<NavLinkVue
-									name="About"
-									to="/about"
-									:currentPath="currentPath"
-									:onChangePath="onChangePath"
-								/>
+								<NavLinkVue name="Home" to="/home" />
+								<NavLinkVue name="Dashboard" to="/dashboard" v-if="store.accountId" />
+								<NavLinkVue name="About" to="/about" />
+								<NavLinkVue name="Verify" to="/verify" />
+
 							</div>
 							<!-- Auth Buttons -->
 							<div
@@ -79,7 +71,7 @@
 									class="w-full px-6 lg:py-3 text-xl mr-0 text-gray-700 lg:px-0 lg:pl-2 lg:mr-4 lg:mr-5 lg:w-auto pb-2"
 								>{{ store.name }}</div>
 								<button
-									@click="logOut"
+									@click="logOut()"
 									class="inline-flex items-center w-full px-6 py-3 text-sm font-medium leading-4 text-white bg-indigo-600 lg:px-3 lg:w-auto lg:rounded-full lg:px-5 hover:bg-indigo-500 focus:outline-none lg:focus:ring-2 focus:ring-0 focus:ring-offset-2 focus:ring-indigo-600"
 								>Logout</button>
 							</div>
@@ -128,21 +120,16 @@
 
 <script setup lang="ts">
 import { useStore } from "@/store";
-import { ref,toRefs } from "vue";
-import { useRoute } from "vue-router";
+import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import NavLinkVue from "./NavLink.vue";
 
-const route = useRoute()
 const showMenu = ref(false);
-const {currentPath} = toRefs(useStore());
 const store = useStore()
-
-
-const onChangePath = (path: string) => {
-	currentPath.value = path;
-};
+const route = useRoute()
+const router = useRouter()
 
 const logOut = async () => {
-	await store.logOut()
+	await store.logOut(route, router)
 };
 </script>

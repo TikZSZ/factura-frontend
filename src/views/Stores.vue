@@ -29,6 +29,11 @@ const d = (async () => {
 	stores.value = data;
 })();
 
+const getTime = (time:string) => {
+  const t = new Date(time).toString().split(" ")
+  return t.slice(0,5).join(' ')
+}
+
 </script>
 
 Prisma
@@ -38,7 +43,7 @@ Prisma
 			<div
 				class="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20"
 			>
-				<h2 class="text-3xl mt-20 font-extrabold text-black dark:text-white sm:text-4xl">
+				<h2 class="text-3xl  font-extrabold text-black dark:text-white sm:text-4xl">
 					<span class="block">Want to sell ?</span>
 					<span class="block text-indigo-500">Create a store to get started!</span>
 				</h2>
@@ -53,7 +58,7 @@ Prisma
 			</div>
 		</div>
 
-		<div v-else class="container lg:mt-9 px-4 mx-auto sm:px-8">
+		<div v-else class="container min-h-screen lg:mt-9 px-4 mx-auto sm:px-8">
 			<div class="py-8">
 				<div class="flex flex-row mb-1 sm:mb-0 justify-between w-full">
 					<h2 class="text-2xl leading-tight">Stores</h2>
@@ -101,7 +106,7 @@ Prisma
 									<td class="px-5 py-5  hidden md:table-cell border-b border-gray-200 bg-white text-sm">
 										<p
 											class="text-gray-900 whitespace-no-wrap"
-										>{{ new Date(store.timeRegistred).toLocaleDateString() }}</p>
+										>{{ getTime(store.timeRegistred) }}</p>
 									</td>
 									<td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
 										<span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
@@ -110,9 +115,9 @@ Prisma
 										</span>
 									</td>
 									<td class=" border-b border-gray-200 leading-6 bg-white text-sm">
-										<button @click="navDash('Create Receipt',router)" class="text-indigo-600 px-2 hover:text-indigo-900">Create Receipt</button>
+										<button @click="navDash('Create Receipt',router,`/dashboard/createReceipt/${store.store_id}`)" class="text-indigo-600 px-2 hover:text-indigo-900">Create Receipt</button>
 										<br>
-										<button @click="navDash('View Receipt',router)" class="text-indigo-600 px-2 hover:text-indigo-900">View Receipts</button>
+										<button @click="navDash('View Receipt',router,`/dashboard/viewReceipts/${store.store_id}`)" class="text-indigo-600 px-2 hover:text-indigo-900">View Receipts</button>
 									</td>
 								</tr>
 							</tbody>

@@ -6,9 +6,19 @@ import { createPinia } from 'pinia'
 
 const app = createApp(App)
 
-app.use(router)
-app.use(createPinia())
-app.mount('#app')
+const main = async ()=>{
+  app.use(router)
+  app.use(createPinia())
+  const {useStore} = await import("@/store")
+  const d =await new Promise<void>(async (resolve, reject) =>{
+    await useStore().checkAuth()
+    resolve()
+  })
+  app.mount('#app')
+}
+main()
+
+
 
 
 
