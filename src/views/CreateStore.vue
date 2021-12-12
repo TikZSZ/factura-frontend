@@ -40,8 +40,6 @@ const sign = async (privateKey: string) => {
 				sequence_no: record.receipt.topicSequenceNumber?.toInt()
 			},
 		});
-		await new Promise((res,red)=>{})
-		console.log(data);
 		prompt.value = false;
 		navDash("Stores", router);
 	} catch(err){

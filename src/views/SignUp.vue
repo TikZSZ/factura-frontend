@@ -42,7 +42,7 @@ const sign = async (privateKey: string) => {
 </script>
 
 <template>
-	<section class="w-full bg-white">
+	<section class="w-full min-h-screen bg-white">
 		<div class="mx-auto max-w-7xl">
 			<!-- Prompt -->
 			<Prompt v-if="prompt" :sign="sign" :disabled="disabled" />
