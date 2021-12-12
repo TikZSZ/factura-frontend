@@ -42,7 +42,7 @@ const getTime = (time: string) => {
 
 <template>
   <div class="px-2 md:px-8 mx-auto w-full min-h-screen">
-    <div v-if="!receipts">
+    <div v-if="!receipts" class="h-screen mt-20">
       <div
         class="bg-white w-1/2 mx-auto p-2 sm:p-4 sm:h-64 rounded-2xl shadow-lg flex flex-col sm:flex-row gap-5 select-none"
       >

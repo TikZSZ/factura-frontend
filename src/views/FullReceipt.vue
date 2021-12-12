@@ -223,9 +223,9 @@ const copy = () => {
             </p>
           </div>
         </div>
-        <button @click="clipboard.copy(receipt!.sequence_no.toString())" class="bg-blue-500 p-3 rounded-2xl text-white">Copy Sequence Number</button>
-        <button @click="clipboard.copy(receipt!.signature)" class="bg-blue-500 p-3 rounded-2xl text-white">Copy Signature</button>
-        <button @click="clipboard.copy(receipt!.store.seller.public_key)" class="bg-blue-500 p-3 rounded-2xl text-white">Copy Seller Public Key</button>
+        <button @click="clipboard.copy(receipt!.sequence_no.toString())" class="bg-blue-500 p-3 rounded-2xl text-white m-3">Copy Sequence Number</button>
+        <button @click="clipboard.copy(receipt!.signature)" class="bg-blue-500 p-3 rounded-2xl text-white m-3">Copy Signature</button>
+        <button @click="clipboard.copy(receipt!.store.seller.public_key)" class="bg-blue-500 p-3 rounded-2xl text-white m-3">Copy Seller Public Key</button>
       </div>
     </div>
   </div>

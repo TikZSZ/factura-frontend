@@ -5,7 +5,7 @@ import {useStore } from "@/store"
 import {toRefs} from "vue"
 import { useRouter } from "vue-router";
 
-const stores = ref<Store[]>();
+const stores = ref<Store[]|null>(null);
 const router = useRouter()
 const {navDash} = toRefs(useStore())
 
@@ -39,7 +39,28 @@ const getTime = (time:string) => {
 Prisma
 <template>
 	<div class="mx-auto w-full">
-		<div v-if="stores?.length === 0" class="bg-white min-h-screen dark:bg-gray-800">
+		<div v-if="!stores" class="h-screen mt-20">
+      <div
+        class="bg-white w-1/2 mx-auto p-2 sm:p-4 sm:h-64 rounded-2xl shadow-lg flex flex-col sm:flex-row gap-5 select-none"
+      >
+        <div class="h-52 sm:h-full sm:w-72 rounded-xl bg-gray-200 animate-pulse"></div>
+        <div class="flex flex-col flex-1 gap-5 sm:p-2">
+          <div class="flex flex-1 flex-col gap-3">
+            <div class="bg-gray-200 w-full animate-pulse h-14 rounded-2xl"></div>
+            <div class="bg-gray-200 w-full animate-pulse h-3 rounded-2xl"></div>
+            <div class="bg-gray-200 w-full animate-pulse h-3 rounded-2xl"></div>
+            <div class="bg-gray-200 w-full animate-pulse h-3 rounded-2xl"></div>
+            <div class="bg-gray-200 w-full animate-pulse h-3 rounded-2xl"></div>
+          </div>
+          <div class="mt-auto flex gap-3">
+            <div class="bg-gray-200 w-20 h-8 animate-pulse rounded-full"></div>
+            <div class="bg-gray-200 w-20 h-8 animate-pulse rounded-full"></div>
+            <div class="bg-gray-200 w-20 h-8 animate-pulse rounded-full ml-auto"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+		<div v-if="stores && stores.length === 0" class="bg-white min-h-screen dark:bg-gray-800">
 			<div
 				class="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20"
 			>
@@ -58,7 +79,7 @@ Prisma
 			</div>
 		</div>
 
-		<div v-else class="container min-h-screen lg:mt-9 px-4 mx-auto sm:px-8">
+		<div v-else-if="stores && stores.length>0" class="container min-h-screen lg:mt-9 px-4 mx-auto sm:px-8">
 			<div class="py-8">
 				<div class="flex flex-row mb-1 sm:mb-0 justify-between w-full">
 					<h2 class="text-2xl leading-tight">Stores</h2>
