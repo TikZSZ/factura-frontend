@@ -28,7 +28,7 @@ useResizeObserver(el, (entries) => {
 <template>
     <div ref="el">
       <NavbarVue />
-      <div >
+      <div class="">
         <router-view />
       </div>
     </div>

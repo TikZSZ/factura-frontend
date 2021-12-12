@@ -209,8 +209,8 @@ const copy = () => {
                 <p>
                   <span class="text-gray-500">Grand Total:</span>
                   {{
-                    receipt.products.reduce((previousValue, product, index, mainArray) => {
-                      return previousValue + parseInt(product.total);
+                    receipt.products.reduce((previousValue, product) => {
+                      return previousValue + parseFloat(product.total);
                     }, 0)
                   }}
                 </p>

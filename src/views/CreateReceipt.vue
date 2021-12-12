@@ -7,11 +7,13 @@ import signature from '@/misc/signature'
 import { sendToConsensus } from './useConsensus'
 import api from '@/misc/api'
 import { useRoute,useRouter } from 'vue-router'
+import { useStore } from '@/store'
 
 const { fields, submitData, update,addProduct,removeProducts } = receiptFields()
 const route = useRoute()
 const prompt = ref(false)
 const disabled = ref(false)
+const store = useStore()
 const router = useRouter()
 // @ts-ignore
 submitData.storeId = route.params.storeId
@@ -41,7 +43,7 @@ const sign = async (privateKey: string) => {
       }
     })
     prompt.value = false
-    router.push(`/dashboard/viewReceipts/${submitData.storeId}`)
+    store.navDash('View Receipts',router,`/dashboard/viewReceipts/${submitData.storeId}`)
   }catch(err){
     console.log(err);
     

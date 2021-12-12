@@ -91,12 +91,13 @@ const total = computed<any>(() => {
 				:value="submitData[name]"
 				@input="(e) => {
 					if (type === 'number') {
-						update(index, name, parseInt((e as any).target.value))
+						update(index, name, parseFloat((e as any).target.value))
 					} else {
 						update(index, name, (e as any).target.value)
 					}
 				}"
 				:type="type"
+				:step="type==='number'?0.01:undefined"
 			/>
 		</div>
 		<div>
