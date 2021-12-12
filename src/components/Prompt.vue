@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
+import ButtonSpinner from './ButtonSpinner.vue';
+
 defineProps<{ sign: (privateKey: string) => void,disabled?:boolean }>()
 const privateKey = ref('')
 </script>
@@ -37,7 +39,11 @@ const privateKey = ref('')
                       <button
                         :disabled="disabled || false"
                         class="inline-block w-full px-5 py-4 text-lg font-medium text-center text-white transition duration-200 bg-blue-600 rounded-lg hover:bg-blue-700 ease"
-                      >Sign</button>
+                        :class="!disabled?' bg-blue-600':' bg-blue-400'"
+                      >
+                      <span v-if="disabled"><ButtonSpinner /></span>
+                      <span v-else>Sign</span>
+                      </button>
                     </div>
                   </form>
                 </div>

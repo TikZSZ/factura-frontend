@@ -3,6 +3,8 @@ import api from "@/misc/api";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import {useClipboard} from "@vueuse/core"
+import Loading from "@/components/Loading.vue";
+import ButtonSpinnerVue from "@/components/ButtonSpinner.vue";
 
 
 interface RootObject {
@@ -43,9 +45,8 @@ interface Product {
   total: string;
   receipt_id: number;
 }
-const receipt = ref<RootObject>();
+const receipt = ref<RootObject|null>(null);
 const route = useRoute();
-
 
 const fetch = (async () => {
   const { data } = await api.get<RootObject>(`/api/getBill/${route.params.receipt_id}`);
@@ -72,12 +73,13 @@ const copy = () => {
     }),
     time:receipt.value.time
   }))
-}
+} 
 
 </script>
 
 <template>
-  <div class="px-2 md:px-8 mx-auto bg-gray-100 w-full min-h-screen">
+  <Loading v-if="!receipt"/>
+  <div v-else class="px-2 md:px-8 mx-auto bg-gray-100 w-full min-h-screen">
     <div class="py-3">
       <div class>
         <h2 class="leading-tight text-3xl">Invoice</h2>
@@ -223,9 +225,12 @@ const copy = () => {
             </p>
           </div>
         </div>
-        <button @click="clipboard.copy(receipt!.sequence_no.toString())" class="bg-blue-500 p-3 rounded-2xl text-white m-3">Copy Sequence Number</button>
-        <button @click="clipboard.copy(receipt!.signature)" class="bg-blue-500 p-3 rounded-2xl text-white m-3">Copy Signature</button>
-        <button @click="clipboard.copy(receipt!.store.seller.public_key)" class="bg-blue-500 p-3 rounded-2xl text-white m-3">Copy Seller Public Key</button>
+        
+        <button @click="clipboard.copy(receipt!.sequence_no.toString())" class="bg-indigo-600 p-3 rounded-2xl text-white m-3">
+        Copy Sequence Number
+        </button>
+        <button @click="clipboard.copy(receipt!.signature)" class="bg-indigo-600 p-3 rounded-2xl text-white m-3">Copy Signature</button>
+        <button @click="clipboard.copy(receipt!.store.seller.public_key)" class="bg-indigo-600 p-3 rounded-2xl text-white m-3">Copy Seller Public Key</button>
       </div>
     </div>
   </div>

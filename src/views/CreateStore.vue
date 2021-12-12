@@ -25,9 +25,10 @@ const submit = async () => {
 
 const sign = async (privateKey: string) => {
 	disabled.value = true
-	const prepData = { ...submitData, timeRegistred: new Date().toUTCString() }
-	const { hexSignature } = signature(privateKey, prepData)
+	
 	try{
+		const prepData = { ...submitData, timeRegistred: new Date().toUTCString() }
+		const { hexSignature } = signature(privateKey, prepData)
 		const record = await sendToConsensus<string>(JSON.stringify({ seller: prepData, signature: hexSignature }), privateKey)
 		if (!record) return
 		console.log(record.consensusTimestamp, record.receipt.topicSequenceNumber);
@@ -43,6 +44,8 @@ const sign = async (privateKey: string) => {
 		prompt.value = false;
 		navDash("Stores", router);
 	} catch(err){
+		console.log(err);
+		
 		disabled.value = false
 	}
 };

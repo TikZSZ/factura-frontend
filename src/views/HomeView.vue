@@ -32,9 +32,8 @@ const store = useStore();
 				<div class="flex flex-col items-center mt-12 text-center">
 					<span class="relative inline-flex w-full md:w-auto">
 						<a
-							href="#_"
 							type="button"
-							class="inline-flex items-center justify-center w-full px-8 py-4 text-base font-bold leading-6 text-white bg-indigo-600 border border-transparent rounded-full md:w-auto hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+							class="inline-flex items-center justify-center w-full px-8 py-4 text-base font-bold leading-6 text-white bg-indigo-600 border border-transparent rounded-full md:w-auto  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
 						>Try Today</a>
 						<span
 							class="absolute top-0 right-0 px-2 py-1 -mt-3 -mr-6 text-xs font-medium leading-tight text-white bg-green-400 rounded-full"
@@ -317,7 +316,7 @@ const store = useStore();
 
 					<h5 class="mt-10 mb-3 font-semibold text-gray-900">How long will I have access to factura</h5>
 					<p>
-						factura will be accessible for free till its out of beta. You will have unlimited access to all your invoices created during beta; however, after that if u want to continue using factura you'll need a pro account.
+						factura will be accessible for free till its out of beta (currently in alpha). You will have unlimited access to all your invoices created during beta; however, after that if u want to continue using factura you'll need a subscription.
 					</p>
 
 					<!-- <h5 class="mt-10 mb-3 font-semibold text-gray-900">What is the license on the pages?</h5>

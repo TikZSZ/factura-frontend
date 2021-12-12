@@ -1,6 +1,9 @@
 import { useStore } from "@/store";
+import Stores from "@/views/Stores.vue";
+import ReceiptHistory from "@/components/ReceiptHistory.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import CreateStore from "@/views/CreateStore.vue";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,12 +34,12 @@ const router = createRouter({
 				{
 					path: "stores",
 					name: "Stores",
-					component: () => import("@/views/Stores.vue"),
+					component: Stores,
 				},
 				{
 					path: "transactionHistory",
 					name: "Transaction History",
-					component: () => import("@/components/ReceiptHistory.vue"),
+					component: ReceiptHistory,
 					props:{
 						link:'/api/getReceiptsForUser',
 						title:"Transaction History",
@@ -46,7 +49,7 @@ const router = createRouter({
 				{
 					path: "createStore",
 					name: "CreateStore",
-					component: () => import("@/views/CreateStore.vue"),
+					component: CreateStore,
 				},
 				{
 					path: "createReceipt/:storeId",

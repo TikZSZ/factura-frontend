@@ -23,11 +23,12 @@ const submit = () => {
 
 const sign = async (privateKey: string) => {
   disabled.value = true
-  const { buyerId, storeId, products } = submitData
-  const time = new Date().toUTCString()
-  const prepData = { storeId: parseInt(storeId), buyerId, products, time: time }
-  const { hexSignature } = signature(privateKey, prepData)
+  
   try{
+    const { buyerId, storeId, products } = submitData
+    const time = new Date().toUTCString()
+    const prepData = { storeId: parseInt(storeId), buyerId, products, time: time }
+    const { hexSignature } = signature(privateKey, prepData)
     const record = await sendToConsensus(JSON.stringify({ receipt: prepData, signature: hexSignature }), privateKey)
     if (!record) return
     //console.log(record);
@@ -42,6 +43,8 @@ const sign = async (privateKey: string) => {
     prompt.value = false
     router.push(`/dashboard/viewReceipts/${submitData.storeId}`)
   }catch(err){
+    console.log(err);
+    
     disabled.value = false
   }
 }

@@ -2,6 +2,7 @@
 import api from "@/misc/api";
 import { ref } from "vue";
 import { useRoute } from "vue-router"
+import Loading from "./Loading.vue";
 
 const props = defineProps<{ link: string, title: string, error: string }>()
 
@@ -42,27 +43,7 @@ const getTime = (time: string) => {
 
 <template>
   <div class="px-2 md:px-8 mx-auto w-full min-h-screen">
-    <div v-if="!receipts" class="h-screen mt-20">
-      <div
-        class="bg-white w-1/2 mx-auto p-2 sm:p-4 sm:h-64 rounded-2xl shadow-lg flex flex-col sm:flex-row gap-5 select-none"
-      >
-        <div class="h-52 sm:h-full sm:w-72 rounded-xl bg-gray-200 animate-pulse"></div>
-        <div class="flex flex-col flex-1 gap-5 sm:p-2">
-          <div class="flex flex-1 flex-col gap-3">
-            <div class="bg-gray-200 w-full animate-pulse h-14 rounded-2xl"></div>
-            <div class="bg-gray-200 w-full animate-pulse h-3 rounded-2xl"></div>
-            <div class="bg-gray-200 w-full animate-pulse h-3 rounded-2xl"></div>
-            <div class="bg-gray-200 w-full animate-pulse h-3 rounded-2xl"></div>
-            <div class="bg-gray-200 w-full animate-pulse h-3 rounded-2xl"></div>
-          </div>
-          <div class="mt-auto flex gap-3">
-            <div class="bg-gray-200 w-20 h-8 animate-pulse rounded-full"></div>
-            <div class="bg-gray-200 w-20 h-8 animate-pulse rounded-full"></div>
-            <div class="bg-gray-200 w-20 h-8 animate-pulse rounded-full ml-auto"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Loading v-if="!receipts" />
 
     <div v-if="receipts && receipts.length === 0" class="py-3">
       <h1 class="text-xl text-red-600">{{ error }}</h1>

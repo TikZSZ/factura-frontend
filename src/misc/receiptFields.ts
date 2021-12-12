@@ -1,6 +1,5 @@
 import Products from '@/misc/Products'
 import { reactive ,ref,toRefs} from 'vue'
-
 export default function useFields(){
 
 

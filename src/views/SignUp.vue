@@ -64,7 +64,10 @@ const sign = async (privateKey: string) => {
 								We've created a simple method for signup/signin without email and password powered by next gen decentralised services
 							</p>
 							<p class="text-xl text-red-400">
-								Note: Your private key never leaves the browser all transactions are signed in browser by you. 
+								Note 1: Your private key never leaves the browser all transactions are signed in browser by you. 
+							</p>
+							<p class="text-xl text-red-400">
+								Note 2: Since factura is in alpha stage, Currently only testnet accounts are supported 
 							</p>
 						</div>
 					</div>

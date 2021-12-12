@@ -13,7 +13,7 @@
 								<span class="text-indigo-600">.</span>
 								<span
 									class="relative -top-2 right-0 px-2 py-0.5 -mt-3 -mr-6 text-xs font-medium leading-tight text-white bg-indigo-600 rounded-full"
-								>Beta</span>
+								>Alpha</span>
 							</span>
 						</router-link>
 					</div>
@@ -34,7 +34,7 @@
 								<span class="text-indigo-600">.</span>
 								<span
 									class="relative -top-2 right-0 px-2 py-0.5 -mt-3 -mr-6 text-xs font-medium leading-tight text-white bg-indigo-600 rounded-full"
-								>Beta</span>
+								>Alpha</span>
 							</router-link>
 							<!-- normal Nav Buttons -->
 							<div
