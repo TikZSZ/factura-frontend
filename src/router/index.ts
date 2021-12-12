@@ -39,7 +39,8 @@ const router = createRouter({
 					component: () => import("@/components/ReceiptHistory.vue"),
 					props:{
 						link:'/api/getReceiptsForUser',
-						title:"Transaction History"
+						title:"Transaction History",
+						error:'Oops! no receipts to show yet. Buy something from a factura assoicated store to view ur receipts here.'
 					}
 				},
 				{
@@ -61,7 +62,8 @@ const router = createRouter({
 					component:() => import('@/components/ReceiptHistory.vue'),
 					props:(route) => ({
 						link:`/api/getReceiptsForStore/${route.params.storeId}`,
-						title:"Store Transaction History"
+						title:"Store Transaction History",
+						error:`Oops! no receipts associated to StoreId ${route.params.storeId} found`
 					})
 				}
 			],	

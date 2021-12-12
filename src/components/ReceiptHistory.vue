@@ -3,7 +3,7 @@ import api from "@/misc/api";
 import { ref } from "vue";
 import {useRoute} from "vue-router"
 
-const props = defineProps<{link:string,title:string}>()
+const props = defineProps<{link:string,title:string,error:string}>()
 
 interface Product {
   seq: number;
@@ -43,7 +43,9 @@ const getTime = (time:string) => {
 <template>
   <div class=" px-2 md:px-8 mx-auto w-full  min-h-screen">
     <div v-if="!receipts"  class="py-3">
-      <h1 class="text-xl text-red-600">Oops! no receipts to show yet. Buy something from a factura assoicated store to view ur receipts here.</h1>
+      <h1 class="text-xl text-red-600">
+        {{error}}
+      </h1>
     </div>
     <div v-else class="py-3">
       <div class="flex flex-row mb-1 sm:mb-0 justify-between w-full">
