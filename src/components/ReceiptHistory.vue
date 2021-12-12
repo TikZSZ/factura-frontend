@@ -24,7 +24,7 @@ interface RootObject {
   products: Product[];
 }
 
-const receipts = ref<RootObject[]|null>();
+const receipts = ref<RootObject[]|null>(null);
 const route = useRoute()
 const fetch = (async () => {
   //`/api/getReceiptsForStore/${route.params.storeId}`
