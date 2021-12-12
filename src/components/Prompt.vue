@@ -7,8 +7,8 @@ const privateKey = ref('')
 </script>
 
 <template>
-  <div class="absolute w-full  z-20 inset-0 overflow-y-auto">
-    <div class="absolute w-full  inset-0 bg-gray-500 opacity-80"></div>
+  <div class="w-full  z-20 inset-0  overflow-y-auto">
+    <div class="absolute  inset-0 bg-gray-500 opacity-80"></div>
     <div
       class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
     >
@@ -20,7 +20,7 @@ const privateKey = ref('')
         aria-labelledby="modal-headline"
       >
         <div>
-          <div class="rounded-lg p-8 bg-white shadow">
+          <div class="relative rounded-lg p-8 bg-white shadow  ">
             <div class="bg-white dark:bg-gray-800">
               <div class="text-center w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20">
                 <h2 class="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">

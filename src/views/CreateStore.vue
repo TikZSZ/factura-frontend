@@ -40,6 +40,7 @@ const sign = async (privateKey: string) => {
 				sequence_no: record.receipt.topicSequenceNumber?.toInt()
 			},
 		});
+		await new Promise((res,red)=>{})
 		console.log(data);
 		prompt.value = false;
 		navDash("Stores", router);
@@ -52,10 +53,10 @@ const sign = async (privateKey: string) => {
 </script>
 
 <template>
-	<div class="w-full h-screen bg-white">
+	<div class="w-full  bg-white">
 		<div class="mx-auto max-w-7xl">
 			<!-- Prompt -->
-			<Prompt v-if="prompt" :sign="sign" :disabled="false" />
+			<Prompt v-if="prompt" :sign="sign" :disabled="disabled" />
 
 			<div class="flex flex-col lg:flex-row" v-show="!prompt">
 				<!-- Left Div -->
