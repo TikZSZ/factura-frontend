@@ -21,6 +21,10 @@ api.interceptors.response.use(
   (config) => {
     done()
     return config
+  },
+  (error) => {
+    done()
+    return Promise.reject(error)
   }
 );
 
