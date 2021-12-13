@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 import { reactive, ref, toRefs } from "vue";
 import api from "@/misc/api";
-import { PrivateKey } from "@hashgraph/sdk";
 import { useStore } from "@/store";
 import { useRouter } from "vue-router";
 import Prompt from "@/components/Prompt.vue";
 import signature from "@/misc/signature";
+import useVuelidate from "@vuelidate/core";
+import { required, minLength, } from "@vuelidate/validators";
+import { validAccountId } from "@/misc/validUserAccID";
+import InputError from "@/components/InputError.vue";
 
 const prompt = ref(false);
 
@@ -18,7 +21,18 @@ const submitData = reactive({
 	country: "",
 });
 
+const rules:{[key in keyof typeof submitData]:any} = {
+	name:{required},
+	userAccountId:validAccountId,
+	country:{required},
+	public_key:{required,minLength:minLength(80)}
+}
+
+const v$ = useVuelidate(rules,submitData)
+
 const submit = async () => {
+	const isValid = await v$.value.$validate()
+	if(!isValid) return
 	prompt.value = true;
 };
 const disabled = ref(false)
@@ -89,9 +103,10 @@ const sign = async (privateKey: string) => {
 								<input
 									type="text"
 									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-									v-model="submitData.name"
+									v-model="v$.name.$model"
 									placeholder="Enter Your Name"
 								/>
+								<InputError :errors="v$.name.$errors"/>
 							</div>
 							<div class="relative">
 								<label class="font-medium text-gray-900">
@@ -101,9 +116,10 @@ const sign = async (privateKey: string) => {
 								<input
 									type="text"
 									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-									v-model="submitData.userAccountId"
+									v-model="v$.userAccountId.$model"
 									placeholder="Enter Your Account ID "
 								/>
+								<InputError :errors="v$.userAccountId.$errors"/>
 							</div>
 							<div class="relative">
 								<label class="font-medium text-gray-900">
@@ -113,9 +129,10 @@ const sign = async (privateKey: string) => {
 								<input
 									type="password"
 									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-									v-model="submitData.public_key"
+									v-model="v$.public_key.$model"
 									placeholder="Public Key"
 								/>
+								<InputError :errors="v$.public_key.$errors"/>
 							</div>
 							<div class="relative">
 								<label class="font-medium text-gray-900">
@@ -125,7 +142,7 @@ const sign = async (privateKey: string) => {
 								<select
 									id="country"
 									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-									v-model="submitData.country"
+									v-model="v$.country.$model"
 									name="country"
 									placeholder="Country"
 								>
@@ -376,6 +393,7 @@ const sign = async (privateKey: string) => {
 									<option value="Zambia">Zambia</option>
 									<option value="Zimbabwe">Zimbabwe</option>
 								</select>
+								<InputError :errors="v$.country.$errors"/>
 							</div>
 							<!-- Submit Button -->
 							<div class="relative">

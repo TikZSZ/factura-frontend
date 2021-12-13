@@ -5,6 +5,5 @@ export default interface Products{
   tax: number,
   discount: number,
   total: number,
-  payment_method: string,
   seq:number
 }

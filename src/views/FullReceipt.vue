@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import api from "@/misc/api";
-import { ref } from "vue";
+import { ref,reactive } from "vue";
 import { useRoute } from "vue-router";
-import {useClipboard} from "@vueuse/core"
+import { useClipboard } from "@vueuse/core"
 import Loading from "@/components/Loading.vue";
 import ButtonSpinnerVue from "@/components/ButtonSpinner.vue";
 
@@ -45,7 +45,7 @@ interface Product {
   total: string;
   receipt_id: number;
 }
-const receipt = ref<RootObject|null>(null);
+const receipt = ref<RootObject | null>(null);
 const route = useRoute();
 
 const fetch = (async () => {
@@ -57,34 +57,80 @@ const fetch = (async () => {
 const clipboard = useClipboard({})
 
 const copy = () => {
-  if(!receipt.value) return
-  
+  if (!receipt.value) return
+
   clipboard.copy(JSON.stringify({
-    storeId:receipt.value.store_id,
-    buyerId:receipt.value.buyer_id,
-    products:receipt.value.products.map((product)=>{
-      const obj:any = {}
-      Object.keys(product).map((key:any)=>{
-        if(key === 'id'||key === 'receipt_id') return
+    storeId: receipt.value.store_id,
+    buyerId: receipt.value.buyer_id,
+    products: receipt.value.products.map((product) => {
+      const obj: any = {}
+      Object.keys(product).map((key: any) => {
+        if (key === 'id' || key === 'receipt_id') return
         obj[key] = product[key as keyof Product]
         return
       })
       return obj
     }),
-    time:receipt.value.time
+    time: receipt.value.time
   }))
-} 
+}
+
+const buttons = reactive({
+  1:false,
+  2:false,
+  3:false
+})
+
+const cp = async (text:string,index:keyof typeof buttons)=>{
+  buttons[index] = true
+  await clipboard.copy(text)
+  setTimeout(()=>{
+    buttons[index] = false
+  },300)
+  
+}
 
 </script>
 
 <template>
-  <Loading v-if="!receipt"/>
+  <Loading v-if="!receipt" />
   <div v-else class="px-2 md:px-8 mx-auto bg-gray-100 w-full min-h-screen">
     <div class="py-3">
-      <div class>
-        <h2 class="leading-tight text-3xl">Invoice</h2>
-      </div>
-      <div class="py-2" v-if="receipt">
+        <div class>
+          <h2 class="leading-tight text-3xl">Invoice</h2>
+        </div>
+        <div class="py-2" v-if="receipt">
+
+        <!-- Copy Buttons -->
+        <div class="">
+
+          <button
+            @click="cp(receipt!.sequence_no.toString(),1)"
+            class="bg-indigo-600 p-3 rounded-2xl text-white m-3 w-52 h-12"
+          >
+            <p v-if="!buttons[1]">Copy Sequence Number</p>
+            <ButtonSpinnerVue v-else class="border-green-200 " />
+          </button>
+
+          <button
+            @click="cp(receipt!.signature,2)"
+            class="bg-indigo-600 p-3 rounded-2xl text-white m-3 w-52  h-12 "
+          >
+            <p v-if="!buttons[2]">Copy Signature</p>
+            <ButtonSpinnerVue v-else class="border-green-200 " />
+          </button>
+
+          <button
+            @click="cp(receipt!.store.seller.public_key,3)"
+            class="bg-indigo-600 p-3 rounded-2xl text-white m-3 w-52 h-12"
+          >
+            <p v-if="!buttons[3]">Copy Seller Public Key</p>
+            <ButtonSpinnerVue v-else class="border-green-200 " />
+          </button>
+
+        </div>
+
+        <!-- Full Receipt -->
         <div
           class="grid font-medium relative grid-flow-row md:grid-cols-2 lg:grid-cols-3 w-full gap-y-10 lg:gap-y-2 gap-x-5 px-5 mb-4 mt-6 py-5 bg-white shadow-md rounded-xl"
         >
@@ -163,7 +209,7 @@ const copy = () => {
           <!-- Products Info -->
           <div class="col-span-full w-full">
             <h1 class="text-xl my-3">Products</h1>
-            <div class="grid grid-row-3 gap-2 border-2 px-2 relative font-serif ">
+            <div class="grid grid-row-3 gap-2 border-2 px-2 relative font-serif">
               <div class="grid grid-cols-5 gap-5">
                 <p class="text-gray-500 col-span-1">S.No</p>
                 <p class="text-gray-500 col-span-2 text-center">Name</p>
@@ -225,12 +271,6 @@ const copy = () => {
             </p>
           </div>
         </div>
-        
-        <button @click="clipboard.copy(receipt!.sequence_no.toString())" class="bg-indigo-600 p-3 rounded-2xl text-white m-3">
-        Copy Sequence Number
-        </button>
-        <button @click="clipboard.copy(receipt!.signature)" class="bg-indigo-600 p-3 rounded-2xl text-white m-3">Copy Signature</button>
-        <button @click="clipboard.copy(receipt!.store.seller.public_key)" class="bg-indigo-600 p-3 rounded-2xl text-white m-3">Copy Seller Public Key</button>
       </div>
     </div>
   </div>

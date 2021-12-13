@@ -1,5 +1,9 @@
 import Products from '@/misc/Products'
-import { reactive ,ref,toRefs} from 'vue'
+import { reactive } from 'vue'
+import useVuelidate from "@vuelidate/core";
+import { required,integer } from "@vuelidate/validators";
+import { validAccountId } from "@/misc/validUserAccID";
+
 export default function useFields(){
 
 
@@ -37,9 +41,18 @@ export default function useFields(){
     }
   ]
 
+  const rules:{[key in keyof typeof submitData]:any} = {
+    storeId:{required,integer},
+    buyerId:validAccountId,
+    products:{}
+  }
+  
+  const v$ = useVuelidate(rules,submitData)
+
   function update(i:number,field:keyof Products,value:any){
     submitData.products[i][field] = value
   }
+  
   function addProduct(){
     submitData.products.push({
       seq:submitData.products.length,
@@ -52,5 +65,5 @@ export default function useFields(){
   function removeProducts(index:number){
     submitData.products.splice(index,1)
   }
-  return {fields,submitData,update,addProduct,removeProducts}
+  return {fields,submitData,update,addProduct,removeProducts,v$}
 }

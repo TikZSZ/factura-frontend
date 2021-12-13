@@ -9,7 +9,9 @@ import api from '@/misc/api'
 import { useRoute,useRouter } from 'vue-router'
 import { useStore } from '@/store'
 
-const { fields, submitData, update,addProduct,removeProducts } = receiptFields()
+import InputError from "@/components/InputError.vue";
+
+const { fields, submitData, update,addProduct,removeProducts,v$ } = receiptFields()
 const route = useRoute()
 const prompt = ref(false)
 const disabled = ref(false)
@@ -18,7 +20,9 @@ const router = useRouter()
 // @ts-ignore
 submitData.storeId = route.params.storeId
 
-const submit = () => {
+const submit = async () => {
+  const isValid = await v$.value.$validate()
+  if(!isValid) return
   console.log(submitData);
   prompt.value = true
 }
@@ -67,20 +71,21 @@ const sign = async (privateKey: string) => {
           <input
             type="text"
             class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-            v-model="submitData[field.name]"
+            v-model="v$[field.name].$model"
             :placeholder="field.placeholder"
             :disabled="route.params.storeId !== '0' && field.name === 'storeId'"
             :class="(route.params.storeId !== '0' && field.name === 'storeId') && 'text-gray-400'"
           />
+          <InputError :errors="v$[field.name].$errors"/>
         </div>
-        <div v-for="(product,index) in submitData.products">
+        <div v-for="(product,index) in v$.products.$model as any">
           <ProductForm
             :key="index"
             :index="index"
             :update="update"
             :submit-data="product"
           />
-          <button type="button" @click="removeProducts(index)" class="inline-block mt-3 px-5 py-2 text-lg font-medium text-center text-white transition duration-200 bg-red-600 rounded-lg hover:bg-blue-700 ease">
+          <button type="button"  @click="removeProducts(index)" class="inline-block mt-3 px-5 py-2 text-lg font-medium text-center text-white transition duration-200 bg-red-600 rounded-lg hover:bg-blue-700 ease">
             X
           </button>
         </div>

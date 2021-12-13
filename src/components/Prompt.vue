@@ -1,9 +1,22 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
+import useVuelidate from "@vuelidate/core";
+import { required, minLength, } from "@vuelidate/validators";
 import ButtonSpinner from './ButtonSpinner.vue';
+import InputError from './InputError.vue';
+import { helpers } from "@vuelidate/validators";
 
-defineProps<{ sign: (privateKey: string) => void,disabled?:boolean }>()
-const privateKey = ref('')
+const props = defineProps<{ sign: (privateKey: string) => void,disabled?:boolean }>()
+const privateKey = reactive({privateKey:''})
+const rules = {
+  privateKey:{required:helpers.withMessage('Private Key is required',required),minLength:minLength(80)}
+}
+const v$ = useVuelidate(rules,privateKey)
+const submit = async () => {
+  const isValid = await v$.value.$validate()
+  if(!isValid) return
+  props.sign(privateKey.privateKey)
+}
 </script>
 
 <template>
@@ -27,21 +40,22 @@ const privateKey = ref('')
                   <span class="block">Enter Private Key</span>
                 </h2>
                 <div class="lg:mt-0 lg:flex-shrink-0">
-                  <form @submit.prevent="sign(privateKey)" class="relative w-full mt-6 space-y-5">
+                  <form @submit.prevent="submit" class="relative w-full mt-6 space-y-5">
                     <input
                       type="text"
                       class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-                      v-model="privateKey"
+                      v-model="v$.privateKey.$model"
                       placeholder="Private Key"
                     />
+                    <InputError :errors="v$.$errors"/>
                     <!-- Submit Button -->
                     <div class="relative">
                       <button
-                        :disabled="disabled || false"
-                        class="inline-block w-full px-5 py-4 text-lg font-medium text-center text-white transition duration-200 bg-blue-600 rounded-lg hover:bg-blue-700 ease"
-                        :class="!disabled?' bg-blue-600':' bg-blue-400'"
+                        :disabled="(disabled || v$.$error )"
+                        class="inline-block w-full px-5 py-4 text-lg font-medium text-center text-white transition duration-200 rounded-lg hover:bg-blue-700 ease"
+                        :class="!(disabled) || v$.$error?' bg-blue-600':' bg-blue-400'"
                       >
-                      <span v-if="disabled"><ButtonSpinner /></span>
+                      <span v-if="(disabled)"><ButtonSpinner /></span>
                       <span v-else>Sign</span>
                       </button>
                     </div>

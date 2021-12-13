@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import Products from '@/misc/Products'
-import { computed, reactive } from 'vue';
+import { computed } from 'vue';
+
 
 const props = defineProps<{ submitData: Partial<Products>, update: (i: number, field: keyof Products, value: any) => void, index: number }>()
 
@@ -29,14 +30,14 @@ const fields: fields[] = [
 	},
 	{
 		name: "tax",
-		label: "Tax",
+		label: "Tax%",
 		placeholder: "Tax as %",
 		required: false,
 		type: "number"
 	},
 	{
 		name: "discount",
-		label: "Discount",
+		label: "Discount %",
 		placeholder: "Discount as %",
 		required: false,
 		type: "number"
@@ -71,7 +72,7 @@ const total = computed<any>(() => {
 			type="text"
 			class="text-gray-500 w-full px-4 py-2 mt-1 text-lg placeholder-gray-400 bg-gray-200 rounded focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
 			placeholder="Total"
-			:value="submitData.seq"
+			:value="submitData['seq']"
 			disabled
 		/>
 	</div>
@@ -79,9 +80,10 @@ const total = computed<any>(() => {
 		
 		<div
 			class="col-span-full md:col-span-1"
-			v-for="({ label, name, type, placeholder, required, }) in fields"
+			v-for="({ label, name, type, placeholder }) in fields"
 		>
-			<label class="font-medium text-gray-900">
+			<div>
+				<label class="font-medium text-gray-900">
 				{{ label }}
 				<span v-if="true" class="text-red-500 required-dot">*</span>
 			</label>
@@ -98,7 +100,9 @@ const total = computed<any>(() => {
 				}"
 				:type="type"
 				:step="type==='number'?0.01:undefined"
+				required
 			/>
+			</div>
 		</div>
 		<div>
 			<label class="font-medium text-gray-900">Total</label>

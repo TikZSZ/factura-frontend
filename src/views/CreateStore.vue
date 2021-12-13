@@ -6,26 +6,44 @@ import { sendToConsensus } from "./useConsensus";
 import { useStore } from "@/store";
 import Prompt from "@/components/Prompt.vue";
 import signature from "@/misc/signature";
+import useVuelidate from "@vuelidate/core";
+import { helpers, required,url } from "@vuelidate/validators";
+import { validAccountId } from "@/misc/validUserAccID";
+import InputError from "@/components/InputError.vue";
 
 const prompt = ref(false);
 const router = useRouter();
 const { navDash } = useStore()
 const disabled = ref(false);
+
+const req = (value:string)=>false
+
 const submitData = reactive({
-	store_name: "",
-	country: "",
-	address: "",
-	website: "",
-	phone_number: 521
+	store_name: '',
+	country: '',
+	address: '',
+	website: '',
+	phone_number: 0,
 });
 
+const rules:{[key in keyof typeof submitData]:any} = {
+	store_name:{required},
+	country:{required},
+	address:{required},
+	website:{required},
+	phone_number:{required}
+}
+
+const v$ = useVuelidate(rules,submitData)
+
 const submit = async () => {
+	const isValid = await v$.value.$validate()
+	if(!isValid) return
 	prompt.value = true;
 };
 
 const sign = async (privateKey: string) => {
 	disabled.value = true
-	
 	try{
 		const prepData = { ...submitData, timeRegistred: new Date().toUTCString() }
 		const { hexSignature } = signature(privateKey, prepData)
@@ -93,9 +111,10 @@ const sign = async (privateKey: string) => {
 								<input
 									type="text"
 									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-									v-model="submitData.store_name"
+									v-model="v$.store_name.$model"
 									placeholder="Enter Your Store Name"
 								/>
+								<InputError :errors="v$.store_name.$errors || []"/>
 							</div>
 							<div class="relative">
 								<label class="font-medium text-gray-900">
@@ -105,9 +124,10 @@ const sign = async (privateKey: string) => {
 								<input
 									type="text"
 									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-									v-model="submitData.address"
+									v-model="v$.address.$model"
 									placeholder="Enter Your Store Address "
 								/>
+								<InputError :errors="v$.address.$errors || []"/>
 							</div>
 							<!-- Website -->
 							<div class="relative">
@@ -118,9 +138,10 @@ const sign = async (privateKey: string) => {
 								<input
 									type="text"
 									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-									v-model="submitData.website"
+									v-model="v$.website.$model"
 									placeholder="Store Website"
 								/>
+								<InputError :errors="v$.website.$errors || []"/>
 							</div>
 							<div class="relative">
 								<label class="font-medium text-gray-900">
@@ -130,7 +151,7 @@ const sign = async (privateKey: string) => {
 								<select
 									id="country"
 									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
-									v-model="submitData.country"
+									v-model="v$.country.$model"
 									name="country"
 									placeholder="Country"
 								>
@@ -381,13 +402,28 @@ const sign = async (privateKey: string) => {
 									<option value="Zambia">Zambia</option>
 									<option value="Zimbabwe">Zimbabwe</option>
 								</select>
+								<InputError :errors="v$.country.$errors || []" />
 							</div>
+							<div class="relative">
+								<label class="font-medium text-gray-900">
+									Phone Number
+									<span class="text-red-500 required-dot">*</span>
+								</label>
+								<input
+									type="number"
+									class="block w-full px-4 py-4 mt-2 text-xl placeholder-gray-400 bg-gray-200 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50"
+									v-model="v$.phone_number.$model"
+									placeholder="Store Website"
+								/>
+								<InputError :errors="v$.phone_number.$errors || []"/>
+							</div>
+							
 							<!-- Submit Button -->
 							<div class="relative">
 								<button
 									href="#_"
 									class="inline-block w-full px-5 py-4 text-lg font-medium text-center text-white transition duration-200 bg-blue-600 rounded-lg hover:bg-blue-700 ease"
-								>Create Account</button>
+								>Create Store</button>
 							</div>
 						</form>
 					</div>

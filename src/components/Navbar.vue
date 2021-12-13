@@ -13,7 +13,7 @@
 								<span class="text-indigo-600">.</span>
 								<span
 									class="relative -top-2 right-0 px-2 py-0.5 -mt-3 -mr-6 text-xs font-medium leading-tight text-white bg-indigo-600 rounded-full"
-								>Alpha</span>
+								>Beta</span>
 							</span>
 						</router-link>
 					</div>
@@ -34,16 +34,16 @@
 								<span class="text-indigo-600">.</span>
 								<span
 									class="relative -top-2 right-0 px-2 py-0.5 -mt-3 -mr-6 text-xs font-medium leading-tight text-white bg-indigo-600 rounded-full"
-								>Alpha</span>
+								>Beta</span>
 							</router-link>
 							<!-- normal Nav Buttons -->
 							<div
 								class="flex flex-col items-start justify-center w-full space-x-6 text-center lg:space-x-8 lg:w-2/3 lg:mt-0 lg:flex-row lg:items-center -mt-5"
 							>
-								<NavLinkVue name="Home" to="/home" />
-								<NavLinkVue name="Dashboard" to="/dashboard" v-if="store.accountId" />
-								<NavLinkVue name="About" to="/about" />
-								<NavLinkVue name="Verify" to="/verify" />
+								<NavLinkVue @click="showMenu = false" name="Home" to="/home" />
+								<NavLinkVue @click="showMenu = false" name="Dashboard" to="/dashboard" v-if="store.accountId" />
+								<NavLinkVue @click="showMenu = false" name="About" to="/about" />
+								<NavLinkVue @click="showMenu = false" name="Verify" to="/verify" />
 
 							</div>
 							<!-- Auth Buttons -->
