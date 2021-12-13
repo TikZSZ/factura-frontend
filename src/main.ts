@@ -12,11 +12,11 @@ const main = async ()=>{
   app.use(router)
   app.use(createPinia())
   NProgress(router)
-  const {useStore} = await import("@/store")
-  const d =await new Promise<void>(async (resolve, reject) =>{
-    await useStore().checkAuth()
-    resolve()
-  })
+  // const {useStore} = await import("@/store")
+  // const d =await new Promise<void>(async (resolve, reject) =>{
+  //   await useStore().checkAuth()
+  //   resolve()
+  // })
   app.mount('#app')
 }
 main()

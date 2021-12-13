@@ -18,9 +18,9 @@ useResizeObserver(el, (entries) => {
   store.isMobile = width < 768
 })
 
-// const d = (async ()=>{
-//   store.checkAuth()
-// })()
+const d = (async ()=>{
+  store.checkAuth()
+})()
 
 
 </script>
