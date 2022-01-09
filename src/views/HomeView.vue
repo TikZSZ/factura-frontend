@@ -42,7 +42,7 @@ const store = useStore();
 							class="absolute top-0 right-0 px-2 py-1 -mt-3 -mr-6 text-xs font-medium leading-tight text-white bg-green-400 rounded-full"
 						>Free</span>
 					</span>
-					<router-link :to="{ name: 'About' }" class="mt-3 text-sm text-indigo-500">Learn More</router-link>
+					<a target="__blank" href="https://drive.google.com/file/d/1wHcQK4tUhx7mswUnaUl-NCwNoJa0znzG/view?usp=sharing" class="mt-3 text-sm text-indigo-500">View Demo</a>
 				</div>
 				<h1 class="text-gray-500 mt-3 ">
 					<span class="font-bold">Note: </span> 
