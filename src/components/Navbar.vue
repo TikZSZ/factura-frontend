@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { useClickOutside } from "@/misc/useOutsideClick";
+import { useStore } from "@/store";
+import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import NavLinkVue from "./NavLink.vue";
+
+const showMenu = ref(false);
+const store = useStore()
+const route = useRoute()
+const router = useRouter()
+const navBarRef = ref(null)
+useClickOutside(navBarRef,()=>{
+	showMenu.value = false
+})
+const logOut = async () => {
+	await store.logOut(route, router)
+};
+</script>
+
 <template>
 	<div class="w-full px-6 antialiased bg-white">
 		<div class="mx-auto max-w-7xl">
@@ -23,6 +43,7 @@
 						:class="{ 'flex fixed': showMenu, hidden: !showMenu }"
 					>
 						<div
+							ref="navBarRef"
 							class="flex-col w-full h-auto overflow-hidden bg-white rounded-lg lg:bg-transparent lg:overflow-visible lg:rounded-none lg:relative lg:flex lg:flex-row"
 						>
 							<!-- Logo -->
@@ -80,7 +101,7 @@
 					<!-- Moble Buttons -->
 					<div
 						@click="showMenu = !showMenu"
-						class="absolute right-0 flex flex-col items-end justify-center w-10 h-10 bg-white rounded-full cursor-pointer lg:hidden hover:bg-gray-100"
+						class="absolute right-0 flex flex-col items-end justify-center w-10 h-10 bg-white rounded-full cursor-pointer lg:hidden"
 					>
 						<svg
 							class="w-6 h-6 text-gray-700"
@@ -95,22 +116,6 @@
 						>
 							<path d="M4 6h16M4 12h16M4 18h16" />
 						</svg>
-						<svg
-							class="w-6 h-6 text-gray-700"
-							v-else="showMenu"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-							xmlns="http://www.w3.org/2000/svg"
-							x-cloak
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M6 18L18 6M6 6l12 12"
-							/>
-						</svg>
 					</div>
 				</div>
 			</nav>
@@ -118,18 +123,4 @@
 	</div>
 </template>
 
-<script setup lang="ts">
-import { useStore } from "@/store";
-import { ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import NavLinkVue from "./NavLink.vue";
 
-const showMenu = ref(false);
-const store = useStore()
-const route = useRoute()
-const router = useRouter()
-
-const logOut = async () => {
-	await store.logOut(route, router)
-};
-</script>

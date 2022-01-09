@@ -4,11 +4,12 @@ import api from "@/misc/api";
 import { useStore } from "@/store";
 import { useRouter } from "vue-router";
 import Prompt from "@/components/Prompt.vue";
-import signature from "@/misc/signature";
 import useVuelidate from "@vuelidate/core";
-import { required, minLength, } from "@vuelidate/validators";
+import { required, } from "@vuelidate/validators";
 import { validAccountId } from "@/misc/validUserAccID";
 import InputError from "@/components/InputError.vue";
+import { validKey } from "@/misc/validKey";
+import Error from "@/components/Error.vue";
 
 const prompt = ref(false);
 
@@ -25,7 +26,7 @@ const rules:{[key in keyof typeof submitData]:any} = {
 	name:{required},
 	userAccountId:validAccountId,
 	country:{required},
-	public_key:{required,minLength:minLength(80)}
+	public_key:validKey(88)
 }
 
 const v$ = useVuelidate(rules,submitData)
@@ -36,22 +37,22 @@ const submit = async () => {
 	prompt.value = true;
 };
 const disabled = ref(false)
-
+const hasError = ref(false)
+const errorMessage = ref('')
 const sign = async (privateKey: string) => {
+	hasError.value = false
 	disabled.value = true
 	try {
-		const { hexSignature } = signature(privateKey, "bills")
-		const { data } = await api.post<{ userAccountId: string; name: string; public_key: string }>("/api/createUser", {
-			data: {
-				...submitData,
-				signature: hexSignature,
-			},
-		});
-		useStore().logIn({ accountId: data.userAccountId, name: data.name }, router);
-		prompt.value = false;
-	} catch (err) {
+		await useStore().submitSignUp(privateKey,submitData,router)	
+	} catch (err:any) {
 		disabled.value = false
+    let eC = err.response?.status
+    hasError.value = true
+    if(eC === 403) errorMessage.value = 'Account ID in use'
+    if(eC === 400) errorMessage.value = 'Credentials mismatch'
+    console.log(err);
 	}
+	prompt.value = false;
 };
 </script>
 
@@ -95,6 +96,7 @@ const sign = async (privateKey: string) => {
 							<router-link to="/signin" href="#_" class="text-blue-600 underline">sign in</router-link>
 						</p>
 						<form @submit.prevent="submit" class="relative w-full mt-10 space-y-8">
+							<Error :active="hasError" class="rounded-b-xl" :msg="errorMessage"/>
 							<div class="relative">
 								<label class="font-medium text-gray-900">
 									Name

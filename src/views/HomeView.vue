@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import Error from "@/components/Error.vue";
 import InputErrorVue from "@/components/InputError.vue";
 import { useStore } from "@/store";
 import useLogin from "./useLogin";
 
-const { submit, v$, disabled } = useLogin();
+const { submit, v$, disabled,hasError,errorMessage } = useLogin();
 const store = useStore();
 
 </script>
@@ -21,6 +22,7 @@ const store = useStore();
 				>
 					<span class="inline md:block">Start Crafting</span>
 					<!-- Your -->
+          <br v-if="store.isMobile">
 					<span
 						class="relative mt-2 text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 to-indigo-500 md:inline-block"
 					>Certified Invoices</span>
@@ -156,6 +158,7 @@ const store = useStore();
 				</div>
 
 				<div class="w-full mt-16 md:mt-0 md:w-2/5">
+					<Error :active="hasError" :msg="errorMessage"/>
 					<form
 						class="relative z-10 h-auto p-8 py-10 overflow-hidden bg-white border-b-2 border-gray-300 rounded-lg shadow-2xl px-7"
 						@submit.prevent="submit"
@@ -301,7 +304,7 @@ const store = useStore();
 			</div>
 			<p
 				class="mt-8 text-base leading-6 text-center text-gray-400"
-			>© 2021 factura, Inc. All rights reserved.</p>
+			>© {{new Date().getFullYear()}} factura, Inc. All rights reserved.</p>
 		</div>
 	</section>
 </template>

@@ -1,13 +1,16 @@
 <script lang="ts" setup>
+import { useClickOutside } from "@/misc/useOutsideClick";
 import { useStore } from "@/store";
-import { toRefs } from "vue";
+import { ref, toRefs } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Option from "./Option.vue";
+const props = defineProps<{ isMobile: boolean; isOpen: boolean; toggle: (bol: boolean) => void }>();
 
 const router = useRouter();
 const route = useRoute();
 const { isMobile, currentTab, navDash } = toRefs(useStore());
-
+const sideBarRef = ref(null)
+useClickOutside(sideBarRef,props.toggle)
 type Option = {
 	name: string;
 	icon: string;
@@ -15,7 +18,6 @@ type Option = {
 	link?: string;
 };
 
-defineProps<{ isMobile: boolean; isOpen: boolean; toggle: (bol: boolean) => void }>();
 
 const options: Option[] = [
 	{
@@ -61,21 +63,8 @@ const options: Option[] = [
 		class="lg:block shadow-lg"
 		:class="{ 'absolute w-52 z-20': isMobile, 'relative w-80': !isMobile, hidden: !isOpen }"
 	>
-		<div class="bg-white min-h-screen dark:bg-gray-700 overflow-hidden">
+		<div ref="sideBarRef" class="bg-white min-h-screen dark:bg-gray-700 overflow-hidden">
 			<div class="flex items-center justify-start pt-6 ml-8">
-				<p class="font-bold dark:text-white text-xl">Plannifer</p>
-				<div class="block mr-6 lg:hidden">
-					<button
-						@click="toggle(false)"
-						class="flex ml-8 p-2 items-center rounded-full bg-white shadow text-gray-500 text-md"
-					>
-						<svg fill="currentColor" class="text-gray-400" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
-							<path
-								d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"
-							/>
-						</svg>
-					</button>
-				</div>
 			</div>
 
 			<nav class="mt-6 min-h-screen">

@@ -8,6 +8,7 @@ import { required, integer, minLength, helpers } from "@vuelidate/validators";
 import hash from "object-hash";
 import InputError from "@/components/InputError.vue";
 import ButtonSpinnerVue from "@/components/ButtonSpinner.vue";
+import { validKey } from "@/misc/validKey";
 
 
 const disabled = ref(false)
@@ -24,7 +25,7 @@ const rules = {
 		required,
 		length: helpers.withMessage("Signature should be of 128 characters long", (value: string) => value.length===0?true:value.length === 128),
 	},
-	publicKey: { required, minLength: minLength(80) },
+	publicKey: validKey(88),
 };
 
 const v$ = useVuelidate(rules, submitData);

@@ -1,9 +1,6 @@
 import { PrivateKey } from "@hashgraph/sdk";
 import hex from "@/misc/hex"
 import hash from "object-hash"
-const toHexString = (bytes: Uint8Array) =>
-bytes.reduce((str: string, byte: number) => str + byte.toString(16).padStart(2, "0"), "");
-
 
 export default  function signature<T>(privateKey:string,data:string|object){
   const pKey = PrivateKey.fromString(privateKey);

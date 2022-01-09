@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
 import { RouteLocationNormalized, Router } from "vue-router";
-import { PrivateKey } from "@hashgraph/sdk";
 import api from "@/misc/api";
+import { client } from "@/misc/server";
+
+let msgToSign = "bills"
 
 export const useStore = defineStore("main", {
 	state: () => ({
@@ -13,7 +15,7 @@ export const useStore = defineStore("main", {
 	}),
 	actions: {
 		async logOut(route: RouteLocationNormalized, router: Router) {
-			await api.get("/api/logout");
+			await client().logOut()
 			this.name = null;
 			this.accountId = null;
 			console.log(route);
@@ -27,19 +29,16 @@ export const useStore = defineStore("main", {
 			this.accountId = data.accountId;
 			router?.push("/home");
 		},
+
 		async submitLogin(submitData: { privateKey: string; accountId: string }, router: Router) {
-			const msg = new TextEncoder().encode("bills");
-			const signature = PrivateKey.fromString(submitData.privateKey).sign(msg);
-			const toHexString = (bytes: Uint8Array) =>
-				bytes.reduce((str: string, byte: number) => str + byte.toString(16).padStart(2, "0"), "");
-			const { data } = await api.post<{ userAccountId: string; name: string }>("/api/loginUser", {
-				data: {
-					userAccountId: submitData.accountId,
-					signature: toHexString(signature),
-				},
-			});
+			const data = await client().login(submitData,msgToSign)
 			this.logIn({ accountId: data.userAccountId, name: data.name }, router);
 		},
+		async submitSignUp<T>(privateKey:string,submitData:T,router:Router){
+			const data = await client().signUp(privateKey,msgToSign,submitData)
+			useStore().logIn({ accountId: data.userAccountId, name: data.name }, router);
+		},
+
 		async checkAuth() {
 			try {
 				const { data } = await api.get<{ userAccountId: string; name: string }>("/api/currentUser");
